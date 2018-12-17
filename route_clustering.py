@@ -1,4 +1,4 @@
-# -*- coding: utf-8-sig -*-
+﻿# -*- coding: utf-8-sig -*-
 
 import googlemaps
 import math
@@ -13,8 +13,9 @@ docs:
 '''
 
 class RouteClustering:
-    # cls var
-    gm = googlemaps.Client(key='AIzaSyDOa6NIT66QT4zO239JqSR5azRvUaaa4vI')  # initiate google maps related services
+    
+    def __init__(self):
+        self.gm = googlemaps.Client(key='AIzaSyDOa6NIT66QT4zO239JqSR5azRvUaaa4vI')  # initiate google maps related services
 
     def has_hk_island(self, hk_locations):
         """
@@ -32,9 +33,8 @@ class RouteClustering:
         As this data will be saved to the Database, this function is kept in case once needed and has no practical usage now.
         """
         coordinates = []
-        gm = googlemaps.Client(key='AIzaSyDOa6NIT66QT4zO239JqSR5azRvUaaa4vI')  # initiate google maps related services
         for address in locations:
-            data = gm.geocode(address)
+            data = self.gm.geocode(address)
             if len(data) == 0:
                 return
             data = data[0]['geometry']['location']
@@ -55,20 +55,20 @@ class RouteClustering:
 
         return ga_dict
 
-    def kmeans_cluster(self, ntkl_geo_list, hk_geo_list=[]):
+    def kmeans_cluster(self, ntkl_list, hk_list=[]):
         """
         Priliminary clustering to give 3 clusters (routes). These routes are formed base on K-Means and can be imbalance in
         terms of number of points, work time and drive distance.
         """
-        ntkl_np = np.array(ntkl_geo_list)  # only numpy array can be used for KMeans functions
-        if not hk_geo_list == []:
+        ntkl_np = np.array(ntkl_list)  # only numpy array can be used for KMeans functions
+        if not hk_list == []:
             ntkl_kmeans = KMeans(n_clusters=2) # define number of clusters 
             ntkl_kmeans.fit(ntkl_np) # this function performs kmeans clustering
             
             # With only one cluster in HK Island, all points belong to it and the origin coordinates is the most important info.
-            hk_centre = KMeans(n_clusters=1).fit(np.array(hk_geo_list)).cluster_centers_.tolist()[0]
+            hk_centre = KMeans(n_clusters=1).fit(np.array(hk_list)).cluster_centers_.tolist()[0]
             # write HK data into the dictionary first. It's key is 99 to indicate HK island route
-            cluster_result = { 99: { 'origin': hk_centre, 'points': hk_geo_list } }  
+            cluster_result = { 99: { 'origin': hk_centre, 'points': hk_list } }  
         else:
             ntkl_kmeans = KMeans(n_clusters=3) # there will be 3 clusters if there is no points in HK Island
             ntkl_kmeans.fit(ntkl_np)
@@ -78,15 +78,15 @@ class RouteClustering:
         ntkl_centres = ntkl_kmeans.cluster_centers_.tolist()  # the coordinates of the cluster centres
         origin_index = 0
 
-        for i in range(len(ntkl_geo_list)):
+        for i in range(len(ntkl_list)):
             if not labels[i] in cluster_result:
                 cluster_result[labels[i]] = {
                                                 'origin': ntkl_centres[origin_index],
-                                                'points': [ntkl_geo_list[i]]
+                                                'points': [ntkl_list[i]]
                                             }
                 origin_index += 1
             else:
-                cluster_result[labels[i]]['points'].append(ntkl_geo_list[i])
+                cluster_result[labels[i]]['points'].append(ntkl_list[i])
 
         return cluster_result
 
@@ -116,8 +116,7 @@ class RouteClustering:
         
         # Every driver will start and stop at company as assumed
         company = '17-19 Dai Hei Street, Tai Po Industrial Estate, Tai Po, New Territories, HK'
-        
-        data = gm.directions(
+        data = self.gm.directions(
             origin=company,
             destination=company,
             mode='driving',
@@ -128,9 +127,9 @@ class RouteClustering:
         for key in data[0]['legs']:  
             duration = key['duration']['text']
             distance = key['distance']['text']
+            
             if '分' in duration:
-                time = self.get_value(duration) 
-                
+                time = self.get_value(duration)     
             elif '小時' in duration:
                 time = self.get_value(duration) * 60 
 

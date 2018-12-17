@@ -1,4 +1,4 @@
-# ALL_LIST = [
+﻿# ALL_LIST = [
 #  {'address': '九龍灣宏照道33號國際交易中心28樓2808室',
 #   'coordinates': [22.321063, 114.209395],
 #   'district': '觀塘區'},
@@ -30,7 +30,7 @@
 #   'coordinates': [22.3073397, 114.2230667],
 #   'district': '觀塘區'},
 #  {'address': 'Flat V 9/F, Block 3 Kwun Tong Industrial Centre, 448-458 Kwun '
-#              'Tong Road, Kwun Tong, Hong Kong',
+#			  'Tong Road, Kwun Tong, Hong Kong',
 #   'coordinates': [22.3110425, 114.2279277],
 #   'district': '觀塘區'},
 #  {'address': '尖沙咀廣東道30號新港中心1座510室',
@@ -151,7 +151,7 @@
 #   'coordinates': [22.265669, 114.2350097],
 #   'district': '中西區'},
 #  {'address': 'Room15,1/F,Shing Yip Industrial Building,19-21 Shing Yip '
-#              'Street,Kwun Tong',
+#			  'Street,Kwun Tong',
 #   'coordinates': [22.3101147, 114.2270687],
 #   'district': '觀塘區'},
 #  {'address': '香港九龍觀塘巧明街100號安盛金融大樓28樓2801室',
@@ -299,7 +299,7 @@
 #   'coordinates': [22.3128723, 114.2242359],
 #   'district': '觀塘區'},
 #  {'address': 'Unit E, 7/F, Mai Tak Industrial Building, 221 Wai Yip Street, '
-#              'Kwun Tong, Hong Kong',
+#			  'Kwun Tong, Hong Kong',
 #   'coordinates': [22.308479, 114.223096],
 #   'district': '觀塘區'},
 #  {'address': '深水步基隆街 194 號地下',
@@ -333,7 +333,7 @@
 #   'coordinates': [22.3000169, 114.1792154],
 #   'district': '油尖旺區'},
 #  {'address': '16/F-17/F, Tower B, Regent Centre,63 Wo Yi Hop Road, Kwai Chung, '
-#              'New Territories, HK',
+#			  'New Territories, HK',
 #   'coordinates': [22.3672642, 114.1378971],
 #   'district': '葵青區'},
 #  {'address': '越華實業公司香港荃灣白田壩街5-21號嘉力工業中心 A座4樓15室',
@@ -352,18 +352,18 @@
 #   'coordinates': [22.3633442, 114.1339955],
 #   'district': '葵青區'},
 #  {'address': "Room 1701 Kwai Hung Holdings Centre, 89 King's Road, North "
-#              'Point, HongKong',
+#			  'Point, HongKong',
 #   'coordinates': [22.2865344, 114.1926794],
 #   'district': '東區'},
 #  {'address': '3F Perfect Industrial Building, 31 Tai Yau Street,Sanpokong, '
-#              'KowloonHong Kong',
+#			  'KowloonHong Kong',
 #   'coordinates': [22.336669, 114.198096],
 #   'district': '九龍城區'},
 #  {'address': '香港仔香港仔大道234號富嘉工業大廈20樓12室',
 #   'coordinates': [22.248849, 114.152779],
 #   'district': '中西區'},
 #  {'address': 'ROOM G02, 15/F,LEGEND TOWER, NO. 7 SHING YIP STREET,KWUN TONG, '
-#              'KOWLOON, ',
+#			  'KOWLOON, ',
 #   'coordinates': [22.310881, 114.226296],
 #   'district': '觀塘區'},
 #  {'address': '新界大埔工業村大富街18號',
@@ -376,7 +376,7 @@
 #   'coordinates': [22.321063, 114.209395],
 #   'district': '觀塘區'},
 #  {'address': 'Flat D, 28/F, Vigor Industrial Building, Block 249-53 Ta Chuen '
-#              'Ping StreetKwai Chung, N.T.',
+#			  'Ping StreetKwai Chung, N.T.',
 #   'coordinates': [22.367954, 114.135603],
 #   'district': '葵青區'},
 #  {'address': '大埔工業村大富街18號 ',
@@ -494,11 +494,11 @@
 #   'coordinates': [22.3155128, 114.2127653],
 #   'district': '九龍城區'},
 #  {'address': 'SUITES 1010-11, 10/F. EXCHANGE TOWER, 33 WANG CHIU ROAD, KOWLOON '
-#              'BAY',
+#			  'BAY',
 #   'coordinates': [22.3210973, 114.2094216],
 #   'district': '九龍城區'},
 #  {'address': '35/F., Standard Chartered Tower, Millennium City 1, 388 Kwun '
-#              'Tong Rd., Kwun Tong, Kowloon ',
+#			  'Tong Rd., Kwun Tong, Kowloon ',
 #   'coordinates': [22.31394, 114.2212701],
 #   'district': '觀塘區'},
 #  {'address': '葵涌華星街1-7號美華工業大廈12樓A室',
@@ -721,110 +721,87 @@
 #   'coordinates': [22.373363, 114.109473],
 #   'district': '荃灣區'}]
 
+from ast import literal_eval
 import googlemaps
 import json
-from route_clustering import RouteClustering as rc
+from route_clustering import RouteClustering
 import socket
-# HOST = '172.17.10.215'
-# PORT = 23456
 
-# with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
-#     s.bind((HOST, PORT))
-#     s.listen()
-#     conn, addr = s.accept()
-#     with conn:
-#         data = conn.recv(8192)  
-"""
-data should be a json obj in the following structure.
-data =  [{
-            'address': '葵涌葵喜街13-29號永恆工業大廈5樓503室',
-            'coordinates': [22.3568072, 114.1237302],
-            'district': '葵青區'
-            },
-        {
-            'address': '荃灣沙咀道52A號皇廷廣場2705-8室',
-            'coordinates': [22.373363, 114.109473],
-            'district': '荃灣區'
-            }]
-"""
+HOST = '172.17.10.215'
+PORT = 23456
+rc = RouteClustering()
 
-# # Google API enabling with KEY
-# gm = googlemaps.Client(key='AIzaSyDOa6NIT66QT4zO239JqSR5azRvUaaa4vI')
+with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+	s.bind((HOST, PORT))
+	s.listen()
+	while True:
+		conn, addr = s.accept()
+		with conn:
+			data = conn.recv(8192)  
+			"""
+			data should be a json obj in the following structure.
+			data =  [{
+						'address': '葵涌葵喜街13-29號永恆工業大廈5樓503室',
+						'coordinates': [22.3568072, 114.1237302],
+						'district': '葵青區'
+						},
+					{
+						'address': '荃灣沙咀道52A號皇廷廣場2705-8室',
+						'coordinates': [22.373363, 114.109473],
+						'district': '荃灣區'
+						}]
+			"""
+			if data:
+				data = data.decode('utf-8')
+				print(type(data), data)
+				data = literal_eval(data)
 
-data =  [{
-            'address': '葵涌葵喜街13-29號永恆工業大廈5樓503室',
-            'coordinates': [22.3568072, 114.1237302],
-            'district': '葵青區'
-            },
-        {
-            'address': '荃灣沙咀道52A號皇廷廣場2705-8室',
-            'coordinates': [22.373363, 114.109473],
-            'district': '荃灣區'
-            },
-        {'address': '觀塘海濱道177號海裕工業中心3字 樓',
-		'coordinates': [22.3098695, 114.22021],
-		'district': '觀塘區'},
-		{'address': '香港荃灣德士古道220-248號全灣工業中心10樓1008室',
-		'coordinates': [22.36504, 114.115642],
-		'district': '荃灣區'},
-		{'address': '新界葵涌貨櫃碼頭51-63號葵順工業中心2樓E室',
-		'coordinates': [22.3532957, 114.1241366],
-		'district': '葵青區'},
-		{'address': '九龍深水步石硤尾街1號地下M3鋪',
-		'coordinates': [22.3276924, 114.1632293],
-		'district': '深水埗區'},
-		{'address': '觀塘榮業街2號振萬廣場 4樓403-405室 ',
-		'coordinates': [22.3073397, 114.2230667],
-		'district': '葵青區'},
-		{'address': '九龍灣常悅道9號企業廣場1期2座905室',
-		'coordinates': [22.3220434, 114.207954],
-		'district': '觀塘區'},]
+				ntkl_locations = []
+				hk_locations = []
+				coor_to_address = {}
+				hk = ['中西區', '灣仔區', '東區', '南區']
 
-ntkl_locations = []
-hk_locations = []
-coor_to_address = {}
-hk = ['中西區', '灣仔區', '東區', '南區']
+				for loc in data:
+					if loc['district'] in hk:
+						hk_locations.append(loc['coordinates'])
+					else:
+						ntkl_locations.append(loc['coordinates'])
 
-for loc in data:
-    if loc['district'] in hk:
-        hk_locations.append(loc['coordinates'])
-    else:
-        ntkl_locations.append(loc['coordinates'])
+					coor_to_address[tuple(loc['coordinates'])] = loc['address']
 
-    coor_to_address[tuple(loc['coordinates'])] = loc['address']
-
-cluster_result = rc.kmeans_cluster(ntkl_locations, hk_locations)
+				cluster_result = rc.kmeans_cluster(ntkl_locations, hk_locations)
 
 
 
-work_time = {}
-work_route = {}
-for loc in cluster_result:
-    work_info = rc.get_work_info(cluster_result[loc]['points'], coor_to_address)
-    work_time[loc] = work_info['duration']
-    work_route[loc] = work_info['route']
-   
-dic_99 = {}
-while rc.is_balanced(work_time):
-    # This if condition is used to make sure points from HK route is never shared to other routes.
-    if max(work_time, key=work_time.get) == 99:
-        dic_99[99] = {'points': cluster_result[99]['points']}
-        cluster_result.pop(99)  
-        work_time.pop(99)
-        work_route.pop(99)
-    
-    cluster_result = rc.rearrange_routes(work_time, cluster_result)
- 
-    for loc in cluster_result:
-        work_info = rc.get_work_info(cluster_result[loc]['points'], coor_to_address)
-        work_time[loc] = work_info['duration']
-        work_route[loc] = work_info['route']
-    
-# Put the 99 (HK) route back to the result if HK route has been the longest
-if dic_99:  
-    work_route[99] = dic_99[99]
+				work_time = {}
+				work_route = {}
+				for loc in cluster_result:
+					work_info = rc.get_work_info(cluster_result[loc]['points'], coor_to_address)
+					work_time[loc] = work_info['duration']
+					work_route[loc] = work_info['route']
+				   
+				dic_99 = {}
+				while rc.is_balanced(work_time):
+					# This if condition is used to make sure points from HK route is never shared to other routes.
+					if max(work_time, key=work_time.get) == 99:
+						dic_99[99] = {'points': cluster_result[99]['points']}
+						cluster_result.pop(99)  
+						work_time.pop(99)
+						work_route.pop(99)
+					
+					cluster_result = rc.rearrange_routes(work_time, cluster_result)
+				 
+					for loc in cluster_result:
+						work_info = rc.get_work_info(cluster_result[loc]['points'], coor_to_address)
+						work_time[loc] = work_info['duration']
+						work_route[loc] = work_info['route']
+					
+				# Put the 99 (HK) route back to the result if HK route has been the longest
+				if dic_99:  
+					work_route[99] = dic_99[99]
 
-print(work_route)
-
-# conn.sendall(work_route)    
-
+				print(work_route)
+				work_route = json.dumps(work_route).encode('utf-8')
+				conn.send(work_route)	
+			else:
+				break
